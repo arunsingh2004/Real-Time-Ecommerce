@@ -1,258 +1,136 @@
 import React from "react";
 import Link from "next/link";
-const Hoodies = () => {
+import mongoose from "mongoose";
+import Product from "@/models/product";
+import connectDb from "@/middleware/mongoose";
+
+const Hoodies = ({ products }) => {
   return (
     <>
-      <div>
-        <section className="text-gray-600 body-font">
-          <div className="container px-5 py-24 mx-auto">
-            <div className="flex flex-wrap -m-4">
-              <Link href="/product/productdetails">
-                <div className="lg:w-auto md:w-auto sm:w-52 p-12 m-6 shadow-lg ">
-                  <div className="block relative rounded overflow-hidden">
-                    <img
-                      alt="ecommerce"
-                      className="m-auto md:m-0 h md:h-[36vh] block"
-                      src="https://m.media-amazon.com/images/I/51ZIqCyzpbL._UX679_.jpg"
-                    />
+      <section className="text-gray-600 body-font">
+        <div className="container px-5 py-24 mx-auto">
+          <div className="flex flex-wrap -m-4 justify-center">
+            {Object.keys(products).length === 0 && (
+              <p>Sorry Currently all hoodies are out stock</p>
+            )}
+            {Object.keys(products).map((item) => {
+              return (
+                <Link
+                  passHref={true}
+                  key={products[item]._id}
+                  href={`/product/${products[item].slug}`}
+                >
+                  <div className="lg:w-auto md:w-auto sm:w-52 p-12 m-6 shadow-lg ">
+                    <div className="block relative rounded overflow-hidden">
+                      <img
+                        alt="ecommerce"
+                        className="m-auto  md:h-[36vh] block"
+                        src={products[item].img}
+                      />
+                    </div>
+                    <div className="mt-4 text-center md:text-left">
+                      <h3 className="text-gray-500 text-xs tracking-widest title-font mb-1">
+                        {products[item].slug}
+                      </h3>
+                      <h2 className="text-gray-900 title-font text-lg font-medium">
+                        {products[item].tittle}
+                      </h2>
+                      <p className="mt-1">{products[item].price}</p>
+
+                      <div>
+                        <p className="mt-1">
+                          {/* {products[item].color.map((color) => {
+                              return (
+                                <span
+                                  key={color}
+                                  className={`inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-red-100 bg-[${color}]-600 rounded-full`}
+                                >
+                                  {color}
+                                </span>
+                              );
+                            })} */}
+                          {products[item].size.includes("S") && (
+                            <span className="border border-gray-300 px-1 mx-1">
+                              S
+                            </span>
+                          )}
+                          {products[item].size.includes("M") && (
+                            <span className="border border-gray-300 px-1 mx-1">
+                              M
+                            </span>
+                          )}
+                          {products[item].size.includes("L") && (
+                            <span className="border border-gray-300 px-1 mx-1">
+                              L
+                            </span>
+                          )}
+                          {products[item].size.includes("XL") && (
+                            <span className="border border-gray-300 px-1 mx-1">
+                              XL
+                            </span>
+                          )}
+                          {products[item].size.includes("XXL") && (
+                            <span className="border border-gray-300 px-1 mx-1">
+                              XXL
+                            </span>
+                          )}
+                        </p>
+                      </div>
+                      <div>
+                        <p className="mt-1">
+                          {products[item].color.includes("red") && (
+                            <button className="border-2 border-gray-300 ml-1 bg-red-700 rounded-full w-6 h-6 focus:outline-none"></button>
+                          )}
+                          {products[item].color.includes("yellow") && (
+                            <button className="border-2 border-gray-300 ml-1 bg-yellow-700 rounded-full w-6 h-6 focus:outline-none"></button>
+                          )}
+                          {products[item].color.includes("green") && (
+                            <button className="border-2 border-gray-300 ml-1 bg-green-700 rounded-full w-6 h-6 focus:outline-none"></button>
+                          )}
+                        </p>
+                      </div>
+                    </div>
                   </div>
-                  <div className="mt-4 text-center md:text-left">
-                    <h3 className="text-gray-500 text-xs tracking-widest title-font mb-1">
-                      T-Shirts
-                    </h3>
-                    <h2 className="text-gray-900 title-font text-lg font-medium">
-                      M L XL XXl
-                    </h2>
-                    <p className="mt-1">Rs:450.00</p>
-                  </div>
-                </div>
-              </Link>
-              <Link href="/product/productdetails">
-                <div className="lg:w-auto md:w-auto sm:w-52 p-12 m-6 shadow-lg ">
-                  <div className="block relative rounded overflow-hidden">
-                    <img
-                      alt="ecommerce"
-                      className="m-auto md:m-0 h md:h-[36vh] block"
-                      src="https://m.media-amazon.com/images/I/51ZIqCyzpbL._UX679_.jpg"
-                    />
-                  </div>
-                  <div className="mt-4 text-center md:text-left">
-                    <h3 className="text-gray-500 text-xs tracking-widest title-font mb-1">
-                      T-Shirts
-                    </h3>
-                    <h2 className="text-gray-900 title-font text-lg font-medium">
-                      M L XL XXl
-                    </h2>
-                    <p className="mt-1">Rs:450.00</p>
-                  </div>
-                </div>
-              </Link>{" "}
-              <Link href="/product/productdetails">
-                <div className="lg:w-auto md:w-auto sm:w-52 p-12 m-6 shadow-lg ">
-                  <div className="block relative rounded overflow-hidden">
-                    <img
-                      alt="ecommerce"
-                      className="m-auto md:m-0 h md:h-[36vh] block"
-                      src="https://m.media-amazon.com/images/I/51ZIqCyzpbL._UX679_.jpg"
-                    />
-                  </div>
-                  <div className="mt-4 text-center md:text-left">
-                    <h3 className="text-gray-500 text-xs tracking-widest title-font mb-1">
-                      T-Shirts
-                    </h3>
-                    <h2 className="text-gray-900 title-font text-lg font-medium">
-                      M L XL XXl
-                    </h2>
-                    <p className="mt-1">Rs:450.00</p>
-                  </div>
-                </div>
-              </Link>{" "}
-              <Link href="/product/productdetails">
-                <div className="lg:w-auto md:w-auto sm:w-52 p-12 m-6 shadow-lg ">
-                  <div className="block relative rounded overflow-hidden">
-                    <img
-                      alt="ecommerce"
-                      className="m-auto md:m-0 h md:h-[36vh] block"
-                      src="https://m.media-amazon.com/images/I/51ZIqCyzpbL._UX679_.jpg"
-                    />
-                  </div>
-                  <div className="mt-4 text-center md:text-left">
-                    <h3 className="text-gray-500 text-xs tracking-widest title-font mb-1">
-                      T-Shirts
-                    </h3>
-                    <h2 className="text-gray-900 title-font text-lg font-medium">
-                      M L XL XXl
-                    </h2>
-                    <p className="mt-1">Rs:450.00</p>
-                  </div>
-                </div>
-              </Link>{" "}
-              <Link href="/product/productdetails">
-                <div className="lg:w-auto md:w-auto sm:w-52 p-12 m-6 shadow-lg ">
-                  <div className="block relative rounded overflow-hidden">
-                    <img
-                      alt="ecommerce"
-                      className="m-auto md:m-0 h md:h-[36vh] block"
-                      src="https://m.media-amazon.com/images/I/51ZIqCyzpbL._UX679_.jpg"
-                    />
-                  </div>
-                  <div className="mt-4 text-center md:text-left">
-                    <h3 className="text-gray-500 text-xs tracking-widest title-font mb-1">
-                      T-Shirts
-                    </h3>
-                    <h2 className="text-gray-900 title-font text-lg font-medium">
-                      M L XL XXl
-                    </h2>
-                    <p className="mt-1">Rs:450.00</p>
-                  </div>
-                </div>
-              </Link>{" "}
-              <Link href="/product/productdetails">
-                <div className="lg:w-auto md:w-auto sm:w-52 p-12 m-6 shadow-lg ">
-                  <div className="block relative rounded overflow-hidden">
-                    <img
-                      alt="ecommerce"
-                      className="m-auto md:m-0 h md:h-[36vh] block"
-                      src="https://m.media-amazon.com/images/I/51ZIqCyzpbL._UX679_.jpg"
-                    />
-                  </div>
-                  <div className="mt-4 text-center md:text-left">
-                    <h3 className="text-gray-500 text-xs tracking-widest title-font mb-1">
-                      T-Shirts
-                    </h3>
-                    <h2 className="text-gray-900 title-font text-lg font-medium">
-                      M L XL XXl
-                    </h2>
-                    <p className="mt-1">Rs:450.00</p>
-                  </div>
-                </div>
-              </Link>{" "}
-              <Link href="/product/productdetails">
-                <div className="lg:w-auto md:w-auto sm:w-52 p-12 m-6 shadow-lg ">
-                  <div className="block relative rounded overflow-hidden">
-                    <img
-                      alt="ecommerce"
-                      className="m-auto md:m-0 h md:h-[36vh] block"
-                      src="https://m.media-amazon.com/images/I/51ZIqCyzpbL._UX679_.jpg"
-                    />
-                  </div>
-                  <div className="mt-4 text-center md:text-left">
-                    <h3 className="text-gray-500 text-xs tracking-widest title-font mb-1">
-                      T-Shirts
-                    </h3>
-                    <h2 className="text-gray-900 title-font text-lg font-medium">
-                      M L XL XXl
-                    </h2>
-                    <p className="mt-1">Rs:450.00</p>
-                  </div>
-                </div>
-              </Link>{" "}
-              <Link href="/product/productdetails">
-                <div className="lg:w-auto md:w-auto sm:w-52 p-12 m-6 shadow-lg ">
-                  <div className="block relative rounded overflow-hidden">
-                    <img
-                      alt="ecommerce"
-                      className="m-auto md:m-0 h md:h-[36vh] block"
-                      src="https://m.media-amazon.com/images/I/51ZIqCyzpbL._UX679_.jpg"
-                    />
-                  </div>
-                  <div className="mt-4 text-center md:text-left">
-                    <h3 className="text-gray-500 text-xs tracking-widest title-font mb-1">
-                      T-Shirts
-                    </h3>
-                    <h2 className="text-gray-900 title-font text-lg font-medium">
-                      M L XL XXl
-                    </h2>
-                    <p className="mt-1">Rs:450.00</p>
-                  </div>
-                </div>
-              </Link>{" "}
-              <Link href="/product/productdetails">
-                <div className="lg:w-auto md:w-auto sm:w-52 p-12 m-6 shadow-lg ">
-                  <div className="block relative rounded overflow-hidden">
-                    <img
-                      alt="ecommerce"
-                      className="m-auto md:m-0 h md:h-[36vh] block"
-                      src="https://m.media-amazon.com/images/I/51ZIqCyzpbL._UX679_.jpg"
-                    />
-                  </div>
-                  <div className="mt-4 text-center md:text-left">
-                    <h3 className="text-gray-500 text-xs tracking-widest title-font mb-1">
-                      T-Shirts
-                    </h3>
-                    <h2 className="text-gray-900 title-font text-lg font-medium">
-                      M L XL XXl
-                    </h2>
-                    <p className="mt-1">Rs:450.00</p>
-                  </div>
-                </div>
-              </Link>{" "}
-              <Link href="/product/productdetails">
-                <div className="lg:w-auto md:w-auto sm:w-52 p-12 m-6 shadow-lg ">
-                  <div className="block relative rounded overflow-hidden">
-                    <img
-                      alt="ecommerce"
-                      className="m-auto md:m-0 h md:h-[36vh] block"
-                      src="https://m.media-amazon.com/images/I/51ZIqCyzpbL._UX679_.jpg"
-                    />
-                  </div>
-                  <div className="mt-4 text-center md:text-left">
-                    <h3 className="text-gray-500 text-xs tracking-widest title-font mb-1">
-                      T-Shirts
-                    </h3>
-                    <h2 className="text-gray-900 title-font text-lg font-medium">
-                      M L XL XXl
-                    </h2>
-                    <p className="mt-1">Rs:450.00</p>
-                  </div>
-                </div>
-              </Link>{" "}
-              <Link href="/product/productdetails">
-                <div className="lg:w-auto md:w-auto sm:w-52 p-12 m-6 shadow-lg ">
-                  <div className="block relative rounded overflow-hidden">
-                    <img
-                      alt="ecommerce"
-                      className="m-auto md:m-0 h md:h-[36vh] block"
-                      src="https://m.media-amazon.com/images/I/51ZIqCyzpbL._UX679_.jpg"
-                    />
-                  </div>
-                  <div className="mt-4 text-center md:text-left">
-                    <h3 className="text-gray-500 text-xs tracking-widest title-font mb-1">
-                      T-Shirts
-                    </h3>
-                    <h2 className="text-gray-900 title-font text-lg font-medium">
-                      M L XL XXl
-                    </h2>
-                    <p className="mt-1">Rs:450.00</p>
-                  </div>
-                </div>
-              </Link>{" "}
-              <Link href="/product/productdetails">
-                <div className="lg:w-auto md:w-auto sm:w-52 p-12 m-6 shadow-lg ">
-                  <div className="block relative rounded overflow-hidden">
-                    <img
-                      alt="ecommerce"
-                      className="m-auto md:m-0 h md:h-[36vh] block"
-                      src="https://m.media-amazon.com/images/I/51ZIqCyzpbL._UX679_.jpg"
-                    />
-                  </div>
-                  <div className="mt-4 text-center md:text-left">
-                    <h3 className="text-gray-500 text-xs tracking-widest title-font mb-1">
-                      T-Shirts
-                    </h3>
-                    <h2 className="text-gray-900 title-font text-lg font-medium">
-                      M L XL XXl
-                    </h2>
-                    <p className="mt-1">Rs:450.00</p>
-                  </div>
-                </div>
-              </Link>
-            </div>
+                </Link>
+              );
+            })}
           </div>
-        </section>
-      </div>
+        </div>
+      </section>
     </>
   );
 };
+
+export async function getServerSideProps(context) {
+  if (!mongoose.connections[0].readyState) {
+    await mongoose.connect(process.env.MONGO_URI);
+  }
+  let products = await Product.find({ category: "hoodies" });
+  let hoodies = {};
+  for (let item of products) {
+    if (item.tittle in hoodies) {
+      if (
+        !hoodies[item.tittle].color.includes(item.color) &&
+        item.availableQty > 0
+      ) {
+        hoodies[item.tittle].color.push(item.color);
+      }
+      if (
+        !hoodies[item.tittle].size.includes(item.size) &&
+        item.availableQty > 0
+      ) {
+        hoodies[item.tittle].size.push(item.size);
+      }
+    } else {
+      hoodies[item.tittle] = JSON.parse(JSON.stringify(item));
+      if (item.availableQty > 0) {
+        hoodies[item.tittle].color = [item.color];
+        hoodies[item.tittle].size = [item.size];
+      }
+    }
+  }
+  //console.log(JSON.parse(JSON.stringify(hoodies)));
+  return { props: { products: JSON.parse(JSON.stringify(hoodies)) } };
+}
 
 export default Hoodies;
