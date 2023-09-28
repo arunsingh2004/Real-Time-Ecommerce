@@ -1,10 +1,76 @@
 import React from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { useState } from "react";
+import { useRouter } from "next/router";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 const Login = () => {
+  const router = useRouter();
+  const [email, setEmail] = useState();
+  const [password, setPassword] = useState();
+
+  const handleChange = (e) => {
+    if (e.target.name == "email") {
+      setEmail(e.target.value);
+    } else if (e.target.name == "password") {
+      setPassword(e.target.value);
+    }
+  };
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const data = { email, password };
+    let res = await fetch("http://localhost:3000/api/login", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    });
+    let response = await res.json();
+    console.log(response);
+    setEmail("");
+    setPassword("");
+    if (response.success) {
+      toast.success("Succesfully Login", {
+        position: "bottom-left",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+      setTimeout(() => {
+        router.push("http://localhost:3000");
+      }, 1000);
+    } else {
+      toast.error("Invalid Credentials", {
+        position: "bottom-left",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+    }
+  };
+
   return (
     <>
       <div className="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
+        <ToastContainer
+          position="bottom-left"
+          autoClose={5000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+        />
         <div className="sm:mx-auto sm:w-full sm:max-w-sm">
           <Link href={"/"}>
             <Image
@@ -21,7 +87,7 @@ const Login = () => {
         </div>
 
         <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-          <form className="space-y-6" action="#" method="POST">
+          <form onSubmit={handleSubmit} className="space-y-6" method="POST">
             <div>
               <label
                 for="email"
@@ -31,6 +97,8 @@ const Login = () => {
               </label>
               <div className="mt-2">
                 <input
+                  value={email}
+                  onChange={handleChange}
                   id="email"
                   name="email"
                   type="email"
@@ -59,6 +127,8 @@ const Login = () => {
               </div>
               <div className="mt-2">
                 <input
+                  value={password}
+                  onChange={handleChange}
                   id="password"
                   name="password"
                   type="password"
