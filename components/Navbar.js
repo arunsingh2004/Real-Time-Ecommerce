@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 import { useRef } from "react";
+import { useState } from "react";
 // import NavLogo from "../public/assets/nav.png";
 import {
   AiOutlineShoppingCart,
@@ -18,8 +19,21 @@ import {
 import { BsFillBagCheckFill } from "react-icons/bs";
 import { MdAccountCircle } from "react-icons/md";
 
-const Navbar = ({ cart, addToCart, removeToCart, clearCart, subTotal }) => {
+const Navbar = ({
+  logout,
+  user,
+  key,
+  cart,
+  addToCart,
+  removeToCart,
+  clearCart,
+  subTotal,
+}) => {
   //console.log(cart);
+  const [dropdown, setDropdown] = useState(false);
+  // const setDropdown = () => {
+  //   setDropdown(!dropdown);
+  // };
   const toggleCart = () => {
     if (ref.current.classList.contains("translate-x-full")) {
       ref.current.classList.remove("translate-x-full");
@@ -33,13 +47,13 @@ const Navbar = ({ cart, addToCart, removeToCart, clearCart, subTotal }) => {
   const ref = useRef();
   return (
     <div className="flex flex-col md:flex-row sticky top-0 bg-white z-10 justify-center md:justify-start items-center py-2 shadow-lg">
-      <div className="logo mx-5">
+      <div className="logo mr-auto md:mx-5">
         <Link href={"/"}>
           <Image src="/logo.png" width={100} height={40} alt="" />
         </Link>
       </div>
       <div className="nav">
-        <ul className="flex items-center space-x-2 md:space-x-8 font-bold md:font-normal md:text-md">
+        <ul className="flex items-center space-x-2 md:space-x-8 font-bold  md:text-md">
           <Link href={"/tshirt"}>
             <li>T-shirts</li>
           </Link>
@@ -56,15 +70,59 @@ const Navbar = ({ cart, addToCart, removeToCart, clearCart, subTotal }) => {
         </ul>
       </div>
       {/* //todo cart */}
-      <div className="flex cart absolute right-0 top-4 text-3xl md:text-3xl mx-4 text-pink-500 hover:text-pink-600 cursor-pointer">
-        <Link href={"/login"}>
-          <MdAccountCircle className="mx-2" />
-        </Link>
 
-        <span onClick={toggleCart} className="relative inline-flex ">
-          <AiOutlineShoppingCart className="" />
-          {/* <div className="absolute inline-flex items-center justify-center w-6 h-6 text-xs font-bold text-white bg-pink-50 rounded-full -top-2 -right-2 ">{Object.keys(cart).qty}</div> */}
-        </span>
+      <div className="flex cart items-center absolute right-0 top-4 text-3xl md:text-3xl mx-4 text-pink-500 hover:text-pink-600 cursor-pointer">
+        <a
+          onMouseOver={() => {
+            setDropdown(true);
+          }}
+          onMouseLeave={() => {
+            setDropdown(false);
+          }}
+        >
+          {dropdown && (
+            <div
+              onMouseOver={() => {
+                setDropdown(true);
+              }}
+              onMouseLeave={() => {
+                setDropdown(false);
+              }}
+              className="absolute text-xl w-40 rounded-md px-5 right-8 bg-pink-300 top-7"
+            >
+              <ul>
+                <Link href={"/myaccount"}>
+                  <li className="py-1 hover:text-pink-600  text-sm ">
+                    MyAccount
+                  </li>
+                </Link>
+                <Link href={"/orders"}>
+                  <li className="py-1 hover:text-pink-600  text-sm ">Orders</li>
+                </Link>
+                <li
+                  onClick={logout}
+                  className="py-1 hover:text-pink-600  text-sm "
+                >
+                  Logout
+                </li>
+              </ul>
+            </div>
+          )}
+          {user.value && <MdAccountCircle className="mx-2  md:text-2xl" />}
+        </a>
+
+        {!user.value && (
+          <Link href={"/login"}>
+            <button className="bg-pink-600 px-2 py-1 rounded-xl text-sm text-white mx-2">
+              Login
+            </button>
+          </Link>
+        )}
+        <AiOutlineShoppingCart
+          onClick={toggleCart}
+          className="text-xl md:text-2xl"
+        />
+        {/* <div className="absolute inline-flex items-center justify-center w-6 h-6 text-xs font-bold text-white bg-pink-50 rounded-full -top-2 -right-2 ">{Object.keys(cart).qty}</div> */}
       </div>
 
       {/* side bar */}
@@ -75,12 +133,11 @@ const Navbar = ({ cart, addToCart, removeToCart, clearCart, subTotal }) => {
         } `}
       >
         <h2 className="font-bold text-xl text-center">Shopping Cart</h2>
-        <span
+
+        <AiFillCloseCircle
           onClick={toggleCart}
           className="absolute top-5 right-2 cursor-pointer text-2xl text-pink-500"
-        >
-          <AiFillCloseCircle />
-        </span>
+        />
         <ol className="list-decimal  font-semibold">
           {Object.keys(cart).length == 0 && (
             <div className="my-4  font-semibold">Your Cart is Empty</div>

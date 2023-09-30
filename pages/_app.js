@@ -6,10 +6,11 @@ import Footer from "../components/Footer";
 export default function App({ Component, pageProps }) {
   const [cart, setCart] = useState({});
   const [subTotal, setsubTotal] = useState(0);
+  const [user, setuser] = useState({ value: null });
+  const [key, setkey] = useState();
   const router = useRouter();
 
   useEffect(() => {
-    console.log("Hey useEffect run in next.js server");
     try {
       if (localStorage.getItem("cart")) {
         setCart(JSON.parse(localStorage.getItem("cart")));
@@ -19,7 +20,18 @@ export default function App({ Component, pageProps }) {
       console.log(error);
       localStorage.clear();
     }
-  }, []);
+    const token = localStorage.getItem("token");
+    if (token) {
+      setuser({ value: token });
+      setkey(Math.random());
+    }
+  }, [router.query]);
+
+  const logout = () => {
+    localStorage.removeItem("token");
+    setuser({ value: null });
+    setkey(Math.random());
+  };
 
   const saveCart = (myCart) => {
     localStorage.setItem("cart", JSON.stringify(myCart));
@@ -29,7 +41,7 @@ export default function App({ Component, pageProps }) {
       subt += myCart[keys[i]].price * myCart[keys[i]].qty;
     }
     setsubTotal(subt);
-    console.log(subTotal);
+    // console.log(subTotal);
     //console.log(setsubTotal);
   };
 
@@ -77,7 +89,9 @@ export default function App({ Component, pageProps }) {
   return (
     <>
       <Navbar
-        key={subTotal}
+        logout={logout}
+        user={user}
+        key={key}
         cart={cart}
         addToCart={addToCart}
         removeToCart={removeToCart}
