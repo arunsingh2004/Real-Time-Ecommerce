@@ -88,7 +88,7 @@ const Navbar = ({
               onMouseLeave={() => {
                 setDropdown(false);
               }}
-              className="absolute text-xl w-40 rounded-md px-5 right-8 bg-pink-300 top-7"
+              className="absolute text-xl w-40 rounded-md px-5 right-8 bg-pink-100 top-6"
             >
               <ul>
                 <Link href={"/myaccount"}>

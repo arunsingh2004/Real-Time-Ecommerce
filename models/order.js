@@ -1,3 +1,4 @@
+"use strict";
 const mongoose = require("mongoose");
 
 const OrderSchema = new mongoose.Schema(
@@ -15,5 +16,7 @@ const OrderSchema = new mongoose.Schema(
   },
   { timestamps: true }
 );
-mongoose.model = {};
+mongoose.models = {};
+//mongoose.model is not a function
+// export default mongoose.models.Order || mongoose.models("Order", OrderSchema);
 export default mongoose.model("Order", OrderSchema);
