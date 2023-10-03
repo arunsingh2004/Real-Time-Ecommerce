@@ -8,7 +8,7 @@ export default function App({ Component, pageProps }) {
   const [cart, setCart] = useState({});
   const [subTotal, setsubTotal] = useState(0);
   const [user, setuser] = useState({ value: null });
-  const [key, setkey] = useState(0);
+  const [key, setkey] = useState();
   const [progress, setProgress] = useState(0);
   const router = useRouter();
 
@@ -100,6 +100,7 @@ export default function App({ Component, pageProps }) {
         waitingTime={400}
         onLoaderFinished={() => setProgress(0)}
       />
+
       <Navbar
         logout={logout}
         user={user}
@@ -111,6 +112,7 @@ export default function App({ Component, pageProps }) {
         clearCart={clearCart}
         subTotal={subTotal}
       />
+
       <Component
         cart={cart}
         addToCart={addToCart}
