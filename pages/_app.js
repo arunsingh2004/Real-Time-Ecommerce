@@ -28,8 +28,8 @@ export default function App({ Component, pageProps }) {
     const token = localStorage.getItem("token");
     if (token) {
       setuser({ value: token });
-      setkey(Math.random());
     }
+    setkey(Math.random());
   }, [router.query]);
 
   const logout = () => {
