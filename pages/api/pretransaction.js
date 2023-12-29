@@ -1,16 +1,48 @@
 const https = require("https");
 import Order from "@/models/order";
 import connectDb from "@/middleware/mongoose";
+import Product from "../../models/product";
 /*
  * import checksum generation utility
  * You can get this utility from https://developer.paytm.com/docs/checksum/
  */
-var PaytmChecksum = require("paytmchecksum");
+const PaytmChecksum = require("paytmchecksum");
 const handler = async (req, res) => {
   if (req.method == "POST") {
     //Check if the cart is tampered with --
+    let products,
+      sumTotal = 0;
+    let cart = req.body.cart;
+    for (let item in req.body.cart) {
+      let product = await Product.findOne({ slug: item });
+      //Check if the cart items are out of stock --
 
-    //Check if the cart items are out of stock --
+      if (product.availableQty < cart[item].qty) {
+        res.status(200).json({
+          succes: false,
+          error: "Item in your cart is Out of Stock. Please try again.",
+        });
+        return;
+      }
+
+      if (product.price != cart[item].price) {
+        res.status(200).json({
+          succes: false,
+          error:
+            "The price of some items in your cart have changes . Please try again.",
+        });
+        return;
+      }
+      sumTotal += product.price * cart[item].quantity;
+    }
+    if (sumTotal !== req.body.subTotal) {
+      res.status(200).json({
+        succes: false,
+        error:
+          "The price of some items in your cart have changes . Please try again.",
+      });
+      return;
+    }
 
     //Check if the details are valid
     if (
@@ -94,7 +126,9 @@ const handler = async (req, res) => {
 
           post_res.on("end", function () {
             // console.log("Response: ", response);
-            resolve(JSON.parse(response).body);
+            let ress = JSON.parse(response).body;
+            ress.succes = true;
+            resolve(ress);
           });
         });
 

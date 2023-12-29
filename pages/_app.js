@@ -25,15 +25,15 @@ export default function App({ Component, pageProps }) {
       console.log(error);
       localStorage.clear();
     }
-    const token = localStorage.getItem("token");
-    if (token) {
-      setuser({ value: token });
+    const myuser = JSON.parse(localStorage.getItem("myuser"));
+    if (myuser) {
+      setuser({ value: myuser.token, email: myuser.email });
     }
     setkey(Math.random());
   }, [router.query]);
 
   const logout = () => {
-    localStorage.removeItem("token");
+    localStorage.removeItem("myuser");
     setuser({ value: null });
     setkey(Math.random());
     router.push("/");
@@ -114,6 +114,7 @@ export default function App({ Component, pageProps }) {
       />
 
       <Component
+        user={user}
         cart={cart}
         addToCart={addToCart}
         removeToCart={removeToCart}

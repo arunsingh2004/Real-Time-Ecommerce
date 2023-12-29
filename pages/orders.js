@@ -8,7 +8,7 @@ const Orders = () => {
 
   useEffect(() => {
     return () => {
-      if (!localStorage.getItem("token")) {
+      if (!localStorage.getItem("myuser")) {
         router.push("/");
       }
     };

@@ -1,6 +1,16 @@
-import React from "react";
-
-const Order = ({ subTotal }) => {
+import { useRouter } from "next/router";
+import React, { useEffect } from "react";
+import mongoose from "mongoose";
+import Order from "../models/order";
+const Orders = ({ subTotal, clearCart }) => {
+  const router = useRouter();
+  useEffect(() => {
+    if (router.query.clearCart == 1) {
+      clearCart();
+    }
+  }, []);
+  console.log(router.query);
+  // console.log(Order);
   return (
     <>
       <div className="">
@@ -67,4 +77,13 @@ const Order = ({ subTotal }) => {
   );
 };
 
-export default Order;
+export async function setServerSideProps(context) {
+  if (!mongoose.connections[0].readyState) {
+    await mongoose.connect(process.env.MONGO_URI);
+  }
+  let order = await Order.findById(context.query.id);
+  return {
+    props: { order: JSON.parse(JSON.stringify(order)) },
+  };
+}
+export default Orders;

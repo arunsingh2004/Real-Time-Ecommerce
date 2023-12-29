@@ -18,7 +18,7 @@ const Post = ({ buyNow, addToCart, product, variants }) => {
     let pinJson = await pins.json();
     console.log(pinJson);
 
-    if (pinJson.includes(parseInt(pin))) {
+    if (Object.keys(pinJson).includes(pin)) {
       setService(true);
       toast.success("Your Pincode is servicable ", {
         position: "bottom-center",

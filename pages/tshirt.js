@@ -126,6 +126,9 @@ export async function getServerSideProps(context) {
       if (item.availableQty > 0) {
         tshirts[item.tittle].color = [item.color];
         tshirts[item.tittle].size = [item.size];
+      } else {
+        tshirts[item.tittle].color = [];
+        tshirts[item.tittle].size = [];
       }
     }
   }
